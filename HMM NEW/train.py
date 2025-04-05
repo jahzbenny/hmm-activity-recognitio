@@ -23,11 +23,12 @@ def load_video_frames(video_path, max_frames=200):
     return frames
 
 # Step 2: Extract basic motion features (frame difference)
-def extract_motion_features(frames):
-    features = []
-    for i in range(1, len(frames)):
-        diff = cv2.absdiff(frames[i], frames[i-1])
-        features.append(np.mean(diff))  # simple motion intensity
+from object_detection_features import load_person_detector, extract_object_features
+
+# Load detection model
+net = load_person_detector()
+features = extract_object_features(frames, net)
+
     return np.array(features).reshape(-1, 1)
 
 # Step 3: Cluster features into discrete observations
